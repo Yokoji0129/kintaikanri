@@ -8,9 +8,9 @@ const loginId = ref("");
 const password = ref("");
 const error = ref("");
 
-function login() {
+const login = () => {
   if (loginId.value === "yokoji" && password.value === "123") {
-    router.push("/management");
+    router.push("/application");
   } else {
     error.value = "ログインIDまたはパスワードが違います";
   }
