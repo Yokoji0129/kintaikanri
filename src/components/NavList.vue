@@ -14,9 +14,9 @@ const isOpen = ref(false);
 
 <template>
   <div class="flex h-screen text-base">
-    <div class="fixed w-full h-18 z-50 bg-green-500 md:hidden">
+    <div class="fixed w-full h-18 z-50 bg-green-700 lg:hidden">
       <button
-        class="absolute top-3 left-3 bg-green-500 text-white py-2.5 px-4 rounded text-2xl"
+        class="absolute top-2.5 left-3 bg-green-500 text-white py-2.5 px-4 rounded text-2xl"
         @click="isOpen = !isOpen"
       >
         ☰
@@ -25,14 +25,14 @@ const isOpen = ref(false);
 
     <nav
       :class="[
-        'fixed h-full w-full bg-green-500 text-white flex flex-col justify-between pt-18 pb-4 md:py-4 md:w-64 duration-300',
+        'fixed h-full w-full bg-green-500 text-white flex flex-col justify-between pt-20 pb-2 lg:py-4 lg:w-64 duration-300',
         isOpen ? 'translate-x-0' : '-translate-x-full',
-        'md:translate-x-0', // デスクトップでは常に表示
+        'lg:translate-x-0', // デスクトップでは常に表示
       ]"
     >
       <!--上部メニュー-->
       <div>
-        <ul class="px-2">
+        <ul class="px-2 space-y-2">
           <li
             class="md:text-lg lg:text-xl font-bold"
             v-for="(item, index) in navList"
