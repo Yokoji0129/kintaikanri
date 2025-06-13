@@ -1,24 +1,28 @@
 <script setup>
 import NavList from "../components/NavList.vue";
 
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
 const buttonGroups = [
   {
     title: "🛠 業務設定",
     items: [
-      { label: "勤務形態設定", color: "blue" },
-      { label: "承認者設定", color: "blue" },
+      { label: "勤務形態設定", color: "blue", path: "" },
+      { label: "承認者設定", color: "blue", path: "" },
     ],
   },
   {
     title: "📝 各種申請",
     items: [
-      { label: "シフト申請", color: "green" },
-      { label: "時間変更申請", color: "green" },
-      { label: "打刻漏れ申請", color: "green" },
-      { label: "休暇申請", color: "green" },
-      { label: "残業申請", color: "green" },
-      { label: "遅刻・早退・外出申請", color: "green" },
-      { label: "月次申請", color: "green" },
+      { label: "シフト申請", color: "green", path: "/shift" },
+      { label: "時間変更申請", color: "green", path: "" },
+      { label: "打刻漏れ申請", color: "green", path: "" },
+      { label: "休暇申請", color: "green", path: "" },
+      { label: "残業申請", color: "green", path: "" },
+      { label: "遅刻・早退・外出申請", color: "green", path: "" },
+      { label: "月次申請", color: "green", path: "" },
     ],
   },
 ];
@@ -55,7 +59,11 @@ const getColorClass = (color) => {
               getColorClass(item.color)
             ]"
           >
-            {{ item.label }}
+             <router-link
+              :to="item.path"
+            >
+              {{ item.label }}
+            </router-link>
           </button>
         </div>
       </div>

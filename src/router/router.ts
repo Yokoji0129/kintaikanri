@@ -5,6 +5,7 @@ import ApplicationView from '../views/ApplicationView.vue'
 import WorkView from '../views/WorkView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import SupportView from '../views/SupportView.vue'
+import ShiftView from '../views/Applications/ShiftView.vue'
 
 const routes = [
   { path: '/', component: LoginView },
@@ -12,6 +13,7 @@ const routes = [
   { path: '/work', component: WorkView },
   { path: '/history', component: HistoryView },
   { path: '/support', component: SupportView },
+  { path: '/shift', component: ShiftView },
 ]
 
 const router = createRouter({

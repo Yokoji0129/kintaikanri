@@ -68,10 +68,10 @@ const statusClass = (status) => {
           <table class="w-full text-left">
             <thead class="bg-gray-300">
               <tr>
-                <th class="px-4 py-2 border">No.</th>
-                <th class="px-4 py-2 border">履歴の種類</th>
-                <th class="px-4 py-2 border">申請日</th>
-                <th class="px-4 py-2 border">状態</th>
+                <th class="px-2 py-2 border">No.</th>
+                <th class="px-2 py-2 border">履歴の種類</th>
+                <th class="px-2 py-2 border">申請日</th>
+                <th class="px-2 py-2 border">状態</th>
               </tr>
             </thead>
             <tbody>
@@ -80,10 +80,10 @@ const statusClass = (status) => {
                 :key="index"
                 class="hover:bg-green-100"
               >
-                <td class="px-4 py-2 border">{{ index + 1 }}</td>
-                <td class="px-4 py-2 border">{{ item.type }}</td>
-                <td class="px-4 py-2 border">{{ item.date }}</td>
-                <td class="px-4 py-2 border">
+                <td class="px-2 py-2 border">{{ index + 1 }}</td>
+                <td class="px-2 py-2 border">{{ item.type }}</td>
+                <td class="px-2 py-2 border">{{ item.date }}</td>
+                <td class="px-2 py-2 border">
                   <span
                     class="px-2 py-1 text-white rounded"
                     :class="statusClass(item.status)"
