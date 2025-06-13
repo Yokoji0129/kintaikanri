@@ -40,7 +40,9 @@ const getColorClass = (color) => {
   <div class="flex h-screen">
     <NavList />
     <main class="flex-1 p-6 bg-gray-100 overflow-auto pt-25 lg:ml-64 lg:pt-7">
-      <h1 class="text-lg font-bold mb-6 bg-blue-200 text-blue-900 rounded-md p-5 text-center md:text-xl lg:text-2xl">
+      <h1
+        class="text-lg font-bold mb-6 bg-blue-200 text-blue-900 rounded-md p-5 text-center md:text-xl lg:text-2xl"
+      >
         お知らせ（打刻漏れ申請をしていません）
       </h1>
 
@@ -51,20 +53,20 @@ const getColorClass = (color) => {
       >
         <h2 class="text-lg font-semibold mb-4">{{ group.title }}</h2>
         <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-          <button
+          <router-link
             v-for="(item, index) in group.items"
             :key="index"
-            :class="[
-              'w-full py-4 rounded-md shadow-md font-bold text-white text-lg lg:text-xl cursor-pointer',
-              getColorClass(item.color)
-            ]"
+            :to="item.path"
           >
-             <router-link
-              :to="item.path"
+            <button
+              :class="[
+                'w-full py-4 rounded-md shadow-md font-bold text-white text-lg lg:text-xl cursor-pointer',
+                getColorClass(item.color),
+              ]"
             >
               {{ item.label }}
-            </router-link>
-          </button>
+            </button>
+          </router-link>
         </div>
       </div>
     </main>
