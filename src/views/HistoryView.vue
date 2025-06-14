@@ -52,7 +52,7 @@ const statusClass = (status) => {
           :key="index"
           @click="selectedTab = tab"
           :class="[
-            'px-4 py-2 font-semibold border-t border-l border-r',
+            'px-4 py-2 font-semibold border-t border-l border-r cursor-pointer',
             selectedTab === tab ? 'bg-green-500 text-white' : 'text-green-500',
           ]"
         >

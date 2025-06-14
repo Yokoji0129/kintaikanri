@@ -9,20 +9,20 @@ const buttonGroups = [
   {
     title: "🛠 業務設定",
     items: [
-      { label: "勤務形態設定", color: "blue", path: "" },
-      { label: "承認者設定", color: "blue", path: "" },
+      { label: "勤務形態設定", color: "blue", path: "workingstyle" },
+      { label: "承認者設定", color: "blue", path: "approver" },
     ],
   },
   {
     title: "📝 各種申請",
     items: [
       { label: "シフト申請", color: "green", path: "/shift" },
-      { label: "時間変更申請", color: "green", path: "" },
-      { label: "打刻漏れ申請", color: "green", path: "" },
-      { label: "休暇申請", color: "green", path: "" },
-      { label: "残業申請", color: "green", path: "" },
-      { label: "遅刻・早退・外出申請", color: "green", path: "" },
-      { label: "月次申請", color: "green", path: "" },
+      { label: "時間変更申請", color: "green", path: "/timechange" },
+      { label: "打刻漏れ申請", color: "green", path: "missingstamping" },
+      { label: "休暇申請", color: "green", path: "/vacation" },
+      { label: "残業申請", color: "green", path: "/overtime" },
+      { label: "遅刻・早退・外出申請", color: "green", path: "attendancerequest" },
+      { label: "月次申請", color: "green", path: "/monthly" },
     ],
   },
 ];
