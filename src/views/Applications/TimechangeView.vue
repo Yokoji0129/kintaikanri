@@ -61,7 +61,7 @@ const TimeTestBtn = () => {
         </div>
 
         <!-- 始業時刻 -->
-        <div>
+        <div v-if="selectedShiftId">
           <label class="block font-semibold md:mb-2">始業時刻</label>
           <input
             type="time"
@@ -71,7 +71,7 @@ const TimeTestBtn = () => {
         </div>
 
         <!-- 終業時刻 -->
-        <div>
+        <div v-if="selectedShiftId">
           <label class="block font-semibold md:mb-2">終業時刻</label>
           <input
             type="time"
@@ -81,7 +81,7 @@ const TimeTestBtn = () => {
         </div>
 
         <!-- 休憩時間 -->
-        <div>
+        <div v-if="selectedShiftId">
           <label class="block font-semibold md:mb-2">休憩時間</label>
           <input
             type="time"
