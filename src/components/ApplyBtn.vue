@@ -7,7 +7,8 @@ const props = defineProps({
   shiftPost: Function,
   TimeChangePost: Function,
   MissingStampingPost:Function,
-  vacationPost: Function
+  vacationPost: Function,
+  overTimePost: Function
 })
 
 // ルートによって押されたときの動作を切り替え
@@ -24,6 +25,9 @@ const handleClick = () => {
       break;
     case "/vacation":
       props.vacationPost && props.vacationPost();
+      break;
+    case "/overtime":
+      props.overTimePost && props.overTimePost();
       break;
     default:
       console.log("不明なページです");
