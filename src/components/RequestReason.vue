@@ -2,21 +2,21 @@
 import { ref, watch } from "vue";
 
 const props = defineProps({
-  modelValue: String,
+  reasonText: String,
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:reasonText"]);
 
-const localReason = ref(props.modelValue);
+const localReason = ref(props.reasonText);
 
-// 親から渡される値が変わったら、それに合わせてlocalReasonも更新
-watch(() => props.modelValue, (value) => {
+//親コンポーネント内の値が変わったときに子に変更を通知する
+watch(() => props.reasonText, (value) => {
   localReason.value = value;
 });
 
-// テキストエリアで入力があるたびに発火して、親に値を伝える
+//テキストエリアで入力があるたびに発火して、親に値を伝える
 const onInput = (e) => {
-  emit("update:modelValue", e.target.value); // 親コンポーネントに更新を通知
+  emit("update:reasonText", e.target.value);
 };
 </script>
 
@@ -24,7 +24,7 @@ const onInput = (e) => {
 <template>
   <div>
     <label class="block font-semibold md:mb-2">申請理由(任意)</label>
-    <!--@inputはユーザーが入力したときに発火する-->
+    <!--@inputはユーザーが入力するたび発火する-->
     <textarea
       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
       rows="3"

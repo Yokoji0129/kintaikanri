@@ -9,8 +9,8 @@ const buttonGroups = [
   {
     title: "🛠 業務設定",
     items: [
-      { label: "勤務形態設定", color: "blue", path: "workingstyle" },
-      { label: "承認者設定", color: "blue", path: "approver" },
+      { label: "勤務形態設定", color: "blue", path: "/workingstyle" },
+      { label: "承認者設定", color: "blue", path: "/approver" },
     ],
   },
   {
@@ -18,10 +18,10 @@ const buttonGroups = [
     items: [
       { label: "シフト申請", color: "green", path: "/shift" },
       { label: "時間変更申請", color: "green", path: "/timechange" },
-      { label: "打刻漏れ申請", color: "green", path: "missingstamping" },
+      { label: "打刻漏れ申請", color: "green", path: "/missingstamping" },
       { label: "休暇申請", color: "green", path: "/vacation" },
       { label: "残業申請", color: "green", path: "/overtime" },
-      { label: "遅刻・早退・外出申請", color: "green", path: "attendancerequest" },
+      { label: "遅刻・早退・外出申請", color: "green", path: "/attendancerequest" },
       { label: "月次申請", color: "green", path: "/monthly" },
     ],
   },
@@ -29,8 +29,8 @@ const buttonGroups = [
 
 const getColorClass = (color) => {
   const map = {
-    green: "bg-green-500 hover:bg-green-600",
-    blue: "bg-blue-500 hover:bg-blue-600",
+    green: "bg-green-500 hover:bg-green-600 border-green-600",
+    blue: "bg-blue-500 hover:bg-blue-600 border-blue-600",
   };
   return map[color];
 };
@@ -60,7 +60,7 @@ const getColorClass = (color) => {
           >
             <button
               :class="[
-                'w-full py-4 rounded-md shadow-md font-bold text-white text-lg lg:text-xl cursor-pointer',
+                'w-full py-4 rounded-md border-3 shadow-md font-bold text-white text-lg lg:text-xl cursor-pointer',
                 getColorClass(item.color),
               ]"
             >

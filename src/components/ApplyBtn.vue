@@ -4,20 +4,33 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 const props = defineProps({
-  ShiftTestBtn: Function,
-  TimeTestBtn: Function,
+  shiftPost: Function,
+  TimeChangePost: Function,
+  MissingStampingPost:Function,
+  vacationPost: Function
 })
 
 // ルートによって押されたときの動作を切り替え
 const handleClick = () => {
-  if (route.path === "/shift") {
-    props.ShiftTestBtn && props.ShiftTestBtn();
-  } else if (route.path === "/timechange") {
-    props.TimeTestBtn && props.TimeTestBtn();
-  } else {
-    console.log("不明なページです");
+  switch (route.path) {
+    case "/shift":
+      props.shiftPost && props.shiftPost();
+      break;
+    case "/timechange":
+      props.TimeChangePost && props.TimeChangePost();
+      break;
+    case "/missingstamping":
+      props.MissingStampingPost && props.MissingStampingPost();
+      break;
+    case "/vacation":
+      props.vacationPost && props.vacationPost();
+      break;
+    default:
+      console.log("不明なページです");
+      break;
   }
 };
+
 </script>
 
 <template>
