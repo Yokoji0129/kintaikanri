@@ -13,8 +13,8 @@ const isOpen = ref(false);
 </script>
 
 <template>
-  <div class="flex h-screen text-base">
-    <div class="fixed w-full h-18 z-50 bg-green-700 lg:hidden">
+  <div class="flex h-screen text-base z-999">
+    <div class="fixed w-full h-18 z-1000 bg-green-700 lg:hidden">
       <button
         class="absolute top-2.5 left-3 bg-green-500 text-white py-2.5 px-4 rounded text-2xl"
         @click="isOpen = !isOpen"
