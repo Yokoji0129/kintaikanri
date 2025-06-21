@@ -1,9 +1,17 @@
 <script setup>
-import NavList from "../components/NavList.vue";
 import { ref, computed } from "vue";
+import NavList from "../components/NavList.vue";
+import Popup from "../components/Popup.vue";
 
 // 表示切替（"shift" or "attendance"）
 const viewType = ref("shift");
+
+const showPopup = ref(false)
+
+const togglePopup = () => {
+  showPopup.value = !showPopup.value
+  console.log(showPopup.value)
+}
 
 // 今日の情報
 const today = new Date();
@@ -175,6 +183,7 @@ const label = (day) => {
         <div
           v-for="day in calendarDays"
           :key="day"
+          @click="togglePopup"
           class="h-28 cursor-pointer border-r border-b border-gray-500 bg-white p-1 flex flex-col text-xs relative hover:bg-green-100 hover:border-green-500 lg:border-t lg:border-l"
           :class="{
             'bg-yellow-100 border-yellow-500': isCurrentMonth && day === currentDate,
@@ -198,6 +207,7 @@ const label = (day) => {
         </div>
       </div>
 
+
       <!-- 出勤簿 合計（固定表示） -->
       <div
         v-if="viewType === 'attendance'"
@@ -208,6 +218,8 @@ const label = (day) => {
         <p class="text-gray-800">労働時間: 160時間</p>
         <p class="text-gray-800">残業時間: 12時間</p>
       </div>
+
+      <Popup v-if="showPopup" />
     </main>
   </div>
 </template>
