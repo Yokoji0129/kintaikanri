@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 
 const props = defineProps({
     shifts: Array,
-    selectedShiftId: Number
+    selectedShiftId: Number,
 });
 
 const emit = defineEmits([

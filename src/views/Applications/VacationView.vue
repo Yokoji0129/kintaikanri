@@ -3,8 +3,9 @@ import { ref } from "vue";
 import ApplyBtn from "../../components/ApplyBtn.vue";
 import NavList from "../../components/NavList.vue";
 import RequestReason from "../../components/RequestReason.vue";
+import SelectReqest from "../../components/SelectRequest.vue";
 
-const vacations = ref([
+const requests = ref([
   "有給",
   "代休",
   "欠勤",
@@ -14,14 +15,13 @@ const vacations = ref([
   "介護",
   "保存",
 ]);
-
-const selectedVacation = ref(null); //選択された休暇種別
+const selectedRequest = ref(null);
 const reasonText = ref(""); //申請理由テキスト
 
 //休暇申請関数
 const vacationPost = () => {
   console.log(
-    `休暇申請から押した。休暇種類: ${selectedVacation.value} 申請理由: ${reasonText.value}`
+    `休暇申請から押した。休暇種類: ${selectedRequest.value} 申請理由: ${reasonText.value}`
   );
 };
 </script>
@@ -35,18 +35,10 @@ const vacationPost = () => {
 
       <div class="bg-white p-4 md:p-6 rounded-lg shadow-md space-y-5">
         <!--休暇種類選択-->
-        <div>
-          <label class="block font-semibold md:mb-2">休暇種類</label>
-          <select
-            v-model="selectedVacation"
-            class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
-          >
-            <option disabled :value="null">選択してください</option>
-            <option v-for="vacation in vacations" :key="vacation.id">
-              {{ vacation }}
-            </option>
-          </select>
-        </div>
+        <SelectReqest
+          :requests="requests"
+          v-model:selectedRequest="selectedRequest"
+        />
 
         <!--時間帯選択-->
 

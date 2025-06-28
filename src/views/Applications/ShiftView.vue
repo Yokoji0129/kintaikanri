@@ -6,6 +6,7 @@ import RequestReason from "../../components/RequestReason.vue";
 import ReqestTime from "../../components/ReqestTime.vue";
 import ApplyBtn from "../../components/ApplyBtn.vue";
 
+const day = ref("");
 const startTime = ref(""); // 始業時刻
 const endTime = ref(""); // 就業時刻
 const breakStartTime = ref(""); // 休憩時刻
@@ -15,7 +16,7 @@ const reasonText = ref(""); //申請理由テキスト
 //シフト申請関数
 const shiftPost = () => {
   console.log(
-    `シフト申請から押した。 始業時刻: ${startTime.value},就業時刻: ${endTime.value},休憩開始時刻: ${breakStartTime.value},休憩終了時刻: ${breakEndTime.value},申請理由: ${reasonText.value}`
+    `シフト申請から押した。 日付:${day.value} 始業時刻: ${startTime.value},就業時刻: ${endTime.value},休憩開始時刻: ${breakStartTime.value},休憩終了時刻: ${breakEndTime.value},申請理由: ${reasonText.value}`
   );
 };
 </script>
@@ -27,6 +28,16 @@ const shiftPost = () => {
       <h1 class="text-xl font-bold mb-3 md:mb-6 text-center">シフト登録</h1>
 
       <div class="bg-white p-4 md:p-6 rounded-lg shadow-md space-y-5">
+        <!--申請日付-->
+        <div>
+          <label class="block font-semibold md:mb-2">日付</label>
+          <input
+            type="date"
+            v-model="day"
+            class="border rounded px-3 py-2 w-full max-w-xs"
+          />
+        </div>
+
         <!-- 始業,就業,休憩時刻-->
         <WorkControlPanel
           v-model:startTime="startTime"

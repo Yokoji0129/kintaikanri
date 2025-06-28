@@ -4,22 +4,43 @@ import ApplyBtn from "../../components/ApplyBtn.vue";
 import NavList from "../../components/NavList.vue";
 import RequestReason from "../../components/RequestReason.vue";
 import SelectShift from "../../components/SelectShift.vue";
+import ReqestTime from "../../components/ReqestTime.vue";
 
 const reasonText = ref(""); //申請理由テキスト
 const selectedShiftId = ref(null);
-const overTimeStart = ref("")//残業開始
-const overTimeEnd = ref("")//残業終了
+const overTimeStart = ref(""); //残業開始
+const overTimeEnd = ref(""); //残業終了
 
 // シフト(仮)データ
 const shifts = ref([
-  { id: 1, start: "09:00", end: "18:00", breakStart: "12:00", breakEnd: "13:00" },
-  { id: 2, start: "10:00", end: "19:00", breakStart: "14:00", breakEnd: "15:00" },
-  { id: 3, start: "12:00", end: "21:00", breakStart: "16:00", breakEnd: "17:00" },
+  {
+    id: 1,
+    start: "09:00",
+    end: "18:00",
+    breakStart: "12:00",
+    breakEnd: "13:00",
+  },
+  {
+    id: 2,
+    start: "10:00",
+    end: "19:00",
+    breakStart: "14:00",
+    breakEnd: "15:00",
+  },
+  {
+    id: 3,
+    start: "12:00",
+    end: "21:00",
+    breakStart: "16:00",
+    breakEnd: "17:00",
+  },
 ]);
 
 //残業申請関数
 const overTimePost = () => {
-  console.log(`残業申請から押した。選択シフト${selectedShiftId.value} 残業開始時刻: ${overTimeStart.value} 残業終了時刻${overTimeEnd.value} 申請理由: ${reasonText.value}`);
+  console.log(
+    `残業申請から押した。選択シフト${selectedShiftId.value} 残業開始時刻: ${overTimeStart.value} 残業終了時刻${overTimeEnd.value} 申請理由: ${reasonText.value}`
+  );
 };
 </script>
 
@@ -31,8 +52,10 @@ const overTimePost = () => {
       <h1 class="text-xl font-bold mb-3 md:mb-6 text-center">残業申請</h1>
 
       <div class="bg-white p-4 md:p-6 rounded-lg shadow-md space-y-5">
-
-        <SelectShift :shifts="shifts"  v-model:selectedShiftId="selectedShiftId" />
+        <SelectShift
+          :shifts="shifts"
+          v-model:selectedShiftId="selectedShiftId"
+        />
         <!--残業開始時刻-->
         <div>
           <label class="block font-semibold md:mb-2">残業開始時刻</label>
@@ -54,6 +77,8 @@ const overTimePost = () => {
 
         <!--申請理由-->
         <RequestReason v-model:reasonText="reasonText" />
+
+        <ReqestTime :startTime="overTimeStart" :endTime="overTimeEnd" />
 
         <!--申請ボタン-->
         <ApplyBtn :overTimePost="overTimePost" />
