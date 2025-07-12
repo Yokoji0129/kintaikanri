@@ -1,115 +1,94 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
+import axios from "axios";
 import NavList from "../components/NavList.vue";
 import Popup from "../components/Popup.vue";
 
-// 表示切替（"shift" or "attendance"）
 const viewType = ref("shift");
-
-const showPopup = ref(false)
-
+const showPopup = ref(false);
 const togglePopup = () => {
-  showPopup.value = !showPopup.value
-  console.log(showPopup.value)
-}
+  showPopup.value = !showPopup.value;
+  console.log(showPopup.value);
+};
 
-// 今日の情報
 const today = new Date();
 const currentYear = today.getFullYear();
 const currentMonth = today.getMonth();
 const currentDate = today.getDate();
 
-// 表示中の年月（初期は今日）
 const year = ref(currentYear);
 const month = ref(currentMonth);
+const isCurrentMonth = computed(() => year.value === currentYear && month.value === currentMonth);
+const prevMonth = () => { month.value === 0 ? (year.value--, month.value = 11) : month.value--; };
+const nextMonth = () => { month.value === 11 ? (year.value++, month.value = 0) : month.value++; };
 
-// 現在の月かどうか（1日背景色のため）
-const isCurrentMonth = computed(() => {
-  return year.value === currentYear && month.value === currentMonth;
-});
-
-//前の月
-const prevMonth = () => {
-  if (month.value === 0) {
-    year.value--;
-    month.value = 11;
-  } else {
-    month.value--;
-  }
-};
-
-//次の月
-const nextMonth = () => {
-  if (month.value === 11) {
-    year.value++;
-    month.value = 0;
-  } else {
-    month.value++;
-  }
-};
-
-// 表示用の "YYYY-MM" キー生成
-const monthKey = computed(() => {
-  return `${year.value}-${String(month.value + 1).padStart(2, '0')}`;
-});
-  
-// その月の1日の日付オブジェクトを作成（year.value年 month.value月の1日）
+const monthKey = computed(() => `${year.value}-${String(month.value + 1).padStart(2, "0")}`);
 const firstDate = computed(() => new Date(year.value, month.value, 1));
-
-// その月の末日（日数）を取得（次の月の0日が今月の末日になる）
-const daysInMonth = computed(() =>
-  new Date(year.value, month.value + 1, 0).getDate()
-);
-
-// その月の1日の曜日を取得（日曜=0～土曜=6）
+const daysInMonth = computed(() => new Date(year.value, month.value + 1, 0).getDate());
 const firstDayOfWeek = computed(() => firstDate.value.getDay());
-
-// カレンダーの空白セルを開始曜日の数だけ作成（1日が正しい曜日の位置に来るように）
-const emptyCells = computed(() =>
-  Array.from({ length: firstDayOfWeek.value })
-);
-
-// カレンダーの日付セル（1～月末日まで）の配列を作成
-// (_, i)は使わない値とインデックス。インデックスに1を足して日付を作る
-const calendarDays = computed(() =>
-  Array.from({ length: daysInMonth.value }, (_, i) => i + 1)
-);
-
-// カレンダーの上部に表示する年月ラベル（例：2025年6月）
+const emptyCells = computed(() => Array.from({ length: firstDayOfWeek.value }));
+const calendarDays = computed(() => Array.from({ length: daysInMonth.value }, (_, i) => i + 1));
 const monthLabel = computed(() => `${year.value}年${month.value + 1}月`);
 
+const shiftData = ref({});
 
-//月ごとのシフトデータ
-const shiftData = {
-  '2025-06': {
-    5: { start: "09:00", end: "18:00", breakStart: "12:00", breakEnd: "13:00" },
-    20: { start: "10:00", end: "18:00", breakStart: "12:00", breakEnd: "13:00" },
-  },
-  '2025-07': {
-    3: { start: "09:30", end: "17:30", breakStart: "12:00", breakEnd: "13:00" },
-    10: { start: "10:00", end: "18:00", breakStart: "13:00", breakEnd: "14:00" },
-  },
-};
-
-//月ごとの出勤簿
 const attendanceData = {
-  '2025-06': {
+  "2025-06": {
     5: { start: "09:02", end: "18:10", breakStart: "12:05", breakEnd: "13:00" },
     20: { start: "10:01", end: "17:45", breakStart: "12:00", breakEnd: "13:00" },
   },
-  '2025-07': {
+  "2025-07": {
     3: { start: "09:33", end: "17:32", breakStart: "12:00", breakEnd: "13:00" },
     10: { start: "10:05", end: "18:05", breakStart: "13:00", breakEnd: "14:00" },
   },
 };
 
-// 表示ラベル取得
+const getShiftData = async () => {
+  try {
+    const res = await axios.get(
+      `http://localhost:8080/api/reach/shiftlist?year=${year.value}&month=${month.value + 1}`
+    );
+
+    const rawList = res.data.shiftlist;
+
+    const mapped = {};
+    rawList.forEach(item => {
+      const date = new Date(item.workStart).getDate();
+      mapped[date] = {
+        start: item.workStart.slice(11, 16),       
+        end: item.workEnd.slice(11, 16),           
+        breakStart: item.breakStart.slice(11, 16),
+        breakEnd: item.breakEnd.slice(11, 16)     
+      };
+    });
+
+    shiftData.value[monthKey.value] = mapped;
+    console.log("shiftData:", mapped);
+  } catch (error) {
+    console.error("エラーが発生しました:", error);
+  }
+};
+
+
+
 const label = (day) => {
   const data =
-    viewType.value === "shift" ? shiftData[monthKey.value] : attendanceData[monthKey.value];
+    viewType.value === "shift"
+      ? shiftData.value[monthKey.value]
+      : attendanceData[monthKey.value];
   return data?.[day] ?? null;
 };
+
+onMounted(() => {
+  getShiftData();
+});
+
+// 月変更でデータ取得
+watch([year, month], () => {
+  getShiftData();
+});
 </script>
+
 
 <template>
   <div class="flex h-screen">
@@ -140,18 +119,22 @@ const label = (day) => {
         <button
           @click="viewType = 'shift'"
           class="w-1/2 cursor-pointer font-semibold px-4 py-2"
-          :class="viewType === 'shift'
-            ? 'bg-green-500 text-white rounded'
-            : 'bg-white border rounded'"
+          :class="
+            viewType === 'shift'
+              ? 'bg-green-500 text-white rounded'
+              : 'bg-white border rounded'
+          "
         >
           シフト
         </button>
         <button
           @click="viewType = 'attendance'"
           class="w-1/2 cursor-pointer font-semibold px-4 py-2"
-          :class="viewType === 'attendance'
-            ? 'bg-blue-500 text-white rounded'
-            : 'bg-white border rounded'"
+          :class="
+            viewType === 'attendance'
+              ? 'bg-blue-500 text-white rounded'
+              : 'bg-white border rounded'
+          "
         >
           出勤簿
         </button>
@@ -186,7 +169,8 @@ const label = (day) => {
           @click="togglePopup"
           class="h-28 cursor-pointer border-r border-b border-gray-500 bg-white p-1 flex flex-col text-xs relative hover:bg-green-100 hover:border-green-500 lg:border-t lg:border-l"
           :class="{
-            'bg-yellow-100 border-yellow-500': isCurrentMonth && day === currentDate,
+            'bg-yellow-100 border-yellow-500':
+              isCurrentMonth && day === currentDate,
           }"
         >
           <div class="font-bold text-right text-gray-800 whitespace-nowrap">
@@ -206,7 +190,6 @@ const label = (day) => {
           </template>
         </div>
       </div>
-
 
       <!-- 出勤簿 合計（固定表示） -->
       <div

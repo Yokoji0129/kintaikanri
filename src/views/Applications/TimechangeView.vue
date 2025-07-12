@@ -9,10 +9,230 @@ import { ref, watch } from "vue";
 
 // シフト(仮)データ
 const shifts = ref([
-  { id: 1, start: "09:00", end: "18:00", breakStart: "12:00", breakEnd: "13:00" },
-  { id: 2, start: "10:00", end: "19:00", breakStart: "14:00", breakEnd: "15:00" },
-  { id: 3, start: "12:00", end: "21:00", breakStart: "16:00", breakEnd: "17:00" },
+  {
+    id: 1,
+    beginWork: "2025-07-01T09:00:00",
+    endWork: "2025-07-01T18:00:00",
+    beginBreak: "2025-07-01T12:00:00",
+    endBreak: "2025-07-01T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30
+  },
+  {
+    id: 2,
+    beginWork: "2025-07-02T09:15:00",
+    endWork: "2025-07-02T18:15:00",
+    beginBreak: "2025-07-02T12:15:00",
+    endBreak: "2025-07-02T13:15:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 45
+  },
+  {
+    id: 3,
+    beginWork: "2025-07-03T09:00:00",
+    endWork: "2025-07-03T18:00:00",
+    beginBreak: "2025-07-03T12:00:00",
+    endBreak: "2025-07-03T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 1,
+    overWork: 60
+  },
+  {
+    id: 4,
+    beginWork: "2025-07-04T09:10:00",
+    endWork: "2025-07-04T18:00:00",
+    beginBreak: "2025-07-04T12:00:00",
+    endBreak: "2025-07-04T13:00:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 20
+  },
+  {
+    id: 5,
+    beginWork: "2025-07-05T09:00:00",
+    endWork: "2025-07-05T17:45:00",
+    beginBreak: "2025-07-05T12:15:00",
+    endBreak: "2025-07-05T13:15:00",
+    lateness: 0,
+    leaveEarly: 1,
+    outing: 0,
+    overWork: 15
+  },
+  {
+    id: 6,
+    beginWork: "2025-07-06T09:00:00",
+    endWork: "2025-07-06T18:30:00",
+    beginBreak: "2025-07-06T12:00:00",
+    endBreak: "2025-07-06T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 90
+  },
+  {
+    id: 7,
+    beginWork: "2025-07-07T08:45:00",
+    endWork: "2025-07-07T18:00:00",
+    beginBreak: "2025-07-07T12:00:00",
+    endBreak: "2025-07-07T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30
+  },
+  {
+    id: 8,
+    beginWork: "2025-07-08T09:30:00",
+    endWork: "2025-07-08T18:00:00",
+    beginBreak: "2025-07-08T12:30:00",
+    endBreak: "2025-07-08T13:30:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 1,
+    overWork: 60
+  },
+  {
+    id: 9,
+    beginWork: "2025-07-09T09:00:00",
+    endWork: "2025-07-09T18:00:00",
+    beginBreak: "2025-07-09T12:00:00",
+    endBreak: "2025-07-09T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 0
+  },
+  {
+    id: 10,
+    beginWork: "2025-07-10T09:00:00",
+    endWork: "2025-07-10T17:30:00",
+    beginBreak: "2025-07-10T12:00:00",
+    endBreak: "2025-07-10T13:00:00",
+    lateness: 0,
+    leaveEarly: 1,
+    outing: 0,
+    overWork: 0
+  },
+  {
+    id: 11,
+    beginWork: "2025-07-11T09:05:00",
+    endWork: "2025-07-11T18:05:00",
+    beginBreak: "2025-07-11T12:05:00",
+    endBreak: "2025-07-11T13:05:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 65
+  },
+  {
+    id: 12,
+    beginWork: "2025-07-12T09:00:00",
+    endWork: "2025-07-12T18:00:00",
+    beginBreak: "2025-07-12T12:00:00",
+    endBreak: "2025-07-12T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30
+  },
+  {
+    id: 13,
+    beginWork: "2025-07-13T09:00:00",
+    endWork: "2025-07-13T18:00:00",
+    beginBreak: "2025-07-13T12:00:00",
+    endBreak: "2025-07-13T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 60
+  },
+  {
+    id: 14,
+    beginWork: "2025-07-14T09:20:00",
+    endWork: "2025-07-14T18:00:00",
+    beginBreak: "2025-07-14T12:00:00",
+    endBreak: "2025-07-14T13:00:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 10
+  },
+  {
+    id: 15,
+    beginWork: "2025-07-15T08:50:00",
+    endWork: "2025-07-15T18:00:00",
+    beginBreak: "2025-07-15T12:00:00",
+    endBreak: "2025-07-15T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 70
+  },
+  {
+    id: 16,
+    beginWork: "2025-07-16T09:00:00",
+    endWork: "2025-07-16T18:00:00",
+    beginBreak: "2025-07-16T12:00:00",
+    endBreak: "2025-07-16T13:00:00",
+    lateness: 0,
+    leaveEarly: 1,
+    outing: 0,
+    overWork: 0
+  },
+  {
+    id: 17,
+    beginWork: "2025-07-17T09:00:00",
+    endWork: "2025-07-17T18:00:00",
+    beginBreak: "2025-07-17T12:00:00",
+    endBreak: "2025-07-17T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 1,
+    overWork: 45
+  },
+  {
+    id: 18,
+    beginWork: "2025-07-18T09:10:00",
+    endWork: "2025-07-18T18:00:00",
+    beginBreak: "2025-07-18T12:00:00",
+    endBreak: "2025-07-18T13:00:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 20
+  },
+  {
+    id: 19,
+    beginWork: "2025-07-19T09:00:00",
+    endWork: "2025-07-19T18:00:00",
+    beginBreak: "2025-07-19T12:00:00",
+    endBreak: "2025-07-19T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 60
+  },
+  {
+    id: 20,
+    beginWork: "2025-07-20T09:00:00",
+    endWork: "2025-07-20T18:00:00",
+    beginBreak: "2025-07-20T12:00:00",
+    endBreak: "2025-07-20T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30
+  }
 ]);
+
+
+
 
 const selectedShiftId = ref(null); // シフト選択変数
 const startTime = ref(""); // 始業時刻
