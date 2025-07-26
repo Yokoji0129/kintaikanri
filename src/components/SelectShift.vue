@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from "vue";
+import { formatDay, formatTime } from '../utils/datetime';
 
 const props = defineProps({
   shifts: Array,
@@ -16,21 +17,17 @@ watch(
 );
 watch(localSelectedShiftId, (val) => emit("update:selectedShiftId", val));
 
+
+// 選択処理
 const selectShift = (id) => {
   localSelectedShiftId.value = id;
   isOpen.value = false;
 };
 
+// 選択中のシフト
 const getShiftLabel = (id) => {
   const shift = props.shifts.find((s) => s.id === id);
-  return shift
-    ? `${shift.start} - ${shift.end}（休憩: ${shift.breakStart} - ${shift.breakEnd}）`
-    : null;
-};
-
-//時間だけ切り抜く
-const formatTime = (isoString) => {
-  return isoString.split("T")[1].slice(0, 5);
+  return shift ? `${formatDay(shift.beginWork)}(${formatTime(shift.beginWork)}~${formatTime(shift.endWork)})休憩(${formatTime(shift.beginBreak)}~${formatTime(shift.endBreak)})` : null;
 };
 </script>
 
@@ -49,25 +46,38 @@ const formatTime = (isoString) => {
     <!-- モーダル本体 -->
     <div
       v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-20"
+      class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm lg:ml-64"
+      @click.self="isOpen = false"
     >
       <div
-        class="bg-white rounded-lg shadow-lg max-h-[70vh] w-[90%] md:w-[500px] overflow-y-auto"
+        class="bg-white mt-[70px] rounded-lg shadow-lg max-h-[70vh] w-90 overflow-y-auto"
       >
         <div class="p-4 border-b text-lg font-semibold">シフトを選択</div>
         <ul>
           <li
             v-for="shift in shifts"
             :key="shift.id"
-            class="p-3 hover:bg-green-100 cursor-pointer border-b text-sm"
+            class="p-3 cursor-pointer border-b"
+            :class="{
+              'bg-green-100': shift.id === localSelectedShiftId,
+              'hover:bg-green-50': shift.id !== localSelectedShiftId,
+            }"
             @click="selectShift(shift.id)"
           >
-            {{ formatTime(shift.beginWork) }}
+            <div class="text-gray-800">
+              {{ formatDay(shift.beginWork) }}
+            </div>
+            <div class="text-sm text-gray-500">
+              <span class="text-gray-800">休憩時間</span>{{ formatTime(shift.beginWork) }}〜{{ formatTime(shift.endWork) }}
+            </div>
+            <div class="text-sm text-gray-500">
+              <span class="text-gray-800">休憩時間</span>{{ formatTime(shift.beginBreak) }}〜{{ formatTime(shift.endBreak) }}
+            </div>
           </li>
         </ul>
 
         <button
-          class="w-full text-center py-2 text-gray-500"
+          class="w-full text-center py-4 text-gray-500"
           @click="isOpen = false"
         >
           キャンセル

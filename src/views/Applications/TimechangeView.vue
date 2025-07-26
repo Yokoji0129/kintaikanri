@@ -6,6 +6,7 @@ import RequestReason from "../../components/RequestReason.vue";
 import SelectShift from "../../components/SelectShift.vue";
 import WorkControlPanel from "../../components/WorkControlPanel.vue";
 import { ref, watch } from "vue";
+import { formatDay, formatTime } from "../../utils/datetime";
 
 // シフト(仮)データ
 const shifts = ref([
@@ -18,7 +19,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 30
+    overWork: 30,
   },
   {
     id: 2,
@@ -29,7 +30,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 0,
-    overWork: 45
+    overWork: 45,
   },
   {
     id: 3,
@@ -40,7 +41,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 1,
-    overWork: 60
+    overWork: 60,
   },
   {
     id: 4,
@@ -51,7 +52,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 0,
-    overWork: 20
+    overWork: 20,
   },
   {
     id: 5,
@@ -62,7 +63,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 1,
     outing: 0,
-    overWork: 15
+    overWork: 15,
   },
   {
     id: 6,
@@ -73,7 +74,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 90
+    overWork: 90,
   },
   {
     id: 7,
@@ -84,7 +85,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 30
+    overWork: 30,
   },
   {
     id: 8,
@@ -95,7 +96,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 1,
-    overWork: 60
+    overWork: 60,
   },
   {
     id: 9,
@@ -106,7 +107,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 0
+    overWork: 0,
   },
   {
     id: 10,
@@ -117,7 +118,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 1,
     outing: 0,
-    overWork: 0
+    overWork: 0,
   },
   {
     id: 11,
@@ -128,7 +129,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 0,
-    overWork: 65
+    overWork: 65,
   },
   {
     id: 12,
@@ -139,7 +140,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 30
+    overWork: 30,
   },
   {
     id: 13,
@@ -150,7 +151,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 60
+    overWork: 60,
   },
   {
     id: 14,
@@ -161,7 +162,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 0,
-    overWork: 10
+    overWork: 10,
   },
   {
     id: 15,
@@ -172,7 +173,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 70
+    overWork: 70,
   },
   {
     id: 16,
@@ -183,7 +184,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 1,
     outing: 0,
-    overWork: 0
+    overWork: 0,
   },
   {
     id: 17,
@@ -194,7 +195,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 1,
-    overWork: 45
+    overWork: 45,
   },
   {
     id: 18,
@@ -205,7 +206,7 @@ const shifts = ref([
     lateness: 1,
     leaveEarly: 0,
     outing: 0,
-    overWork: 20
+    overWork: 20,
   },
   {
     id: 19,
@@ -216,7 +217,7 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 60
+    overWork: 60,
   },
   {
     id: 20,
@@ -227,42 +228,36 @@ const shifts = ref([
     lateness: 0,
     leaveEarly: 0,
     outing: 0,
-    overWork: 30
-  }
+    overWork: 30,
+  },
 ]);
 
-
-
-
 const selectedShiftId = ref(null); // シフト選択変数
-const startTime = ref(""); // 始業時刻
-const endTime = ref(""); // 就業時刻
-const breakStartTime = ref(""); // 休憩時間
-const breakEndTime = ref(""); // 休憩時間
+const beginWork = ref(""); // 始業時刻
+const endWork = ref(""); // 就業時刻
+const beginBreak = ref(""); // 休憩時間
+const endBreak = ref(""); // 休憩時間
 const reasonText = ref(""); //申請理由テキスト
 
 // selectedShiftIdが変わったときに自動で反映
 watch(selectedShiftId, (newId) => {
   const selected = shifts.value.find((s) => s.id === newId);
-  console.log(selected);
   if (selected) {
-    startTime.value = selected.start;
-    endTime.value = selected.end;
-    breakStartTime.value = selected.breakStart;
-    breakEndTime.value = selected.breakEnd;
+    beginWork.value = selected.beginWork;
+    endWork.value = selected.endWork;
+    beginBreak.value = selected.beginBreak;
+    endBreak.value = selected.endBreak;
   } else {
-    startTime.value = "";
-    endTime.value = "";
-    breakStartTime.value = ""
-    breakEndTime.value = "";
+    beginWork.value = "";
+    endWork.value = "";
+    beginBreak.value = "";
+    endBreak.value = "";
   }
 });
 
 //時間変更申請関数
 const TimeChangePost = () => {
-  console.log(
-    `時間変更申請から押した。  始業時刻: ${startTime.value},就業時刻: ${endTime.value},休憩開始時刻: ${breakStartTime.value},休憩終了時刻: ${breakEndTime.value},申請理由: ${reasonText.value}`
-  );
+  console.log(`${formatDay(beginWork.value)}　出勤時間(${formatTime(beginWork.value)}-${formatTime(endWork.value)})休憩：(${formatTime(beginBreak.value)}-${formatTime(endBreak.value)}申請理由${reasonText.value}`);
 };
 </script>
 
@@ -276,15 +271,18 @@ const TimeChangePost = () => {
 
       <div class="bg-white p-4 md:p-6 rounded-lg shadow-md space-y-5">
         <!-- 対象シフト選択 -->
-        <SelectShift :shifts="shifts" v-model:selectedShiftId="selectedShiftId" />
+        <SelectShift
+          :shifts="shifts"
+          v-model:selectedShiftId="selectedShiftId"
+        />
 
         <!-- 始業,就業,休憩時間-->
         <WorkControlPanel
           v-if="selectedShiftId"
-          v-model:startTime="startTime"
-          v-model:endTime="endTime"
-          v-model:breakStartTime="breakStartTime"
-          v-model:breakEndTime="breakEndTime"
+          v-model:beginWork="beginWork"
+          v-model:endWork="endWork"
+          v-model:beginBreak="beginBreak"
+          v-model:endBreak="endBreak"
         />
 
         <!-- 申請理由 -->
@@ -293,10 +291,10 @@ const TimeChangePost = () => {
         <!-- 申請時間 -->
         <ReqestTime
           v-if="selectedShiftId"
-          :startTime="startTime"
-          :endTime="endTime"
-          :breakStartTime="breakStartTime"
-          :breakEndTime="breakEndTime"
+          :beginWork="beginWork"
+          :endWork="endWork"
+          :beginBreak="beginBreak"
+          :endBreak="endBreak"
         />
 
         <!-- 申請ボタン -->

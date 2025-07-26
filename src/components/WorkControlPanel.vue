@@ -1,51 +1,56 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { formatDay, formatTime } from '../utils/datetime';
 
 const route = useRoute();
 
 const props = defineProps({
-  startTime: String,
-  endTime: String,
-  breakStartTime: String,
-  breakEndTime: String,
+  beginWork: String,
+  endWork: String,
+  beginBreak: String,
+  endBreak: String,
 });
 
 const emit = defineEmits([
-  "update:startTime",
-  "update:endTime",
-  "update:breakStartTime",
-  "update:breakEndTime",
+  "update:beginWork",
+  "update:endWork",
+  "update:beginBreak",
+  "update:endBreak",
 ]);
 
-const localStart = ref(props.startTime);
-const localEnd = ref(props.endTime);
-const localStartBreak = ref(props.breakStartTime);
-const localEndBreak = ref(props.breakEndTime);
+const localBeginWork = ref(formatTime(props.beginWork));
+const localEndWork = ref(formatTime(props.endWork));
+const localBeginBreak = ref(formatTime(props.beginBreak));
+const localEndBreak = ref(formatTime(props.endBreak));
 
-// 親コンポーネントから渡された値が変わったときに子の値を更新（親 → 子）
-watch(
-  () => props.startTime,
-  (val) => (localStart.value = val)
-);
-watch(
-  () => props.endTime,
-  (val) => (localEnd.value = val)
-);
-watch(
-  () => props.breakStartTime,
-  (val) => (localStartBreak.value = val)
-);
-watch(
-  () => props.breakEndTime,
-  (val) => (localEndBreak.value = val)
-);
+// 親 → 子 の更新("T" を含んでいたら → formatTime(val) を実行)
+watch(() => props.beginWork, (val) => {
+  localBeginWork.value = val?.includes("T") ? formatTime(val) : val;
+});
+watch(() => props.endWork, (val) => {
+  localEndWork.value = val?.includes("T") ? formatTime(val) : val;
+});
+watch(() => props.beginBreak, (val) => {
+  localBeginBreak.value = val?.includes("T") ? formatTime(val) : val;
+});
+watch(() => props.endBreak, (val) => {
+  localEndBreak.value = val?.includes("T") ? formatTime(val) : val;
+});
+
 
 // 子コンポーネント内の値が変わったときに親に変更通知（子 → 親）
-watch(localStart, (val) => emit("update:startTime", val));
-watch(localEnd, (val) => emit("update:endTime", val));
-watch(localStartBreak, (val) => emit("update:breakStartTime", val));
-watch(localEndBreak, (val) => emit("update:breakEndTime", val));
+watch(localBeginWork, (val) => {
+  const datePart = props.beginWork?.split("T")[0] || "2025-01-01";
+  emit("update:beginWork", `${datePart}T${val}:00`);
+});
+watch(localEndWork, (val) => {
+  const datePart = props.endWork?.split("T")[0] || "2025-01-01";
+  emit("update:endWork", `${datePart}T${val}:00`);
+});
+
+watch(localBeginBreak, (val) => emit("update:beginBreak", val));
+watch(localEndBreak, (val) => emit("update:endBreak", val));
 </script>
 
 <template>
@@ -54,7 +59,7 @@ watch(localEndBreak, (val) => emit("update:breakEndTime", val));
     <label class="block font-semibold md:mb-2">始業時刻</label><!--開始時刻-->
     <input
       type="time"
-      v-model="localStart"
+      v-model="localBeginWork"
       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
     />
   </div>
@@ -62,7 +67,7 @@ watch(localEndBreak, (val) => emit("update:breakEndTime", val));
   <div>
     <label class="block font-semibold md:mb-2">終業時刻</label><!--終業時刻-->
     <input
-      v-model="localEnd"
+      v-model="localEndWork"
       type="time"
       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
     />
@@ -72,7 +77,7 @@ watch(localEndBreak, (val) => emit("update:breakEndTime", val));
   <div v-if="route.path !== '/attendancerequest'">
     <label class="block font-semibold md:mb-2">休憩開始時刻</label>
     <input
-      v-model="localStartBreak"
+      v-model="localBeginBreak"
       type="time"
       value="01:00"
       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"

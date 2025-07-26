@@ -5,19 +5,18 @@ import WorkControlPanel from "../../components/WorkControlPanel.vue";
 import RequestReason from "../../components/RequestReason.vue";
 import ReqestTime from "../../components/ReqestTime.vue";
 import ApplyBtn from "../../components/ApplyBtn.vue";
+import { formatDay, formatTime } from '../../utils/datetime';
 
 const day = ref("");
-const startTime = ref(""); // 始業時刻
-const endTime = ref(""); // 就業時刻
-const breakStartTime = ref(""); // 休憩時刻
-const breakEndTime = ref(""); // 休憩時刻
+const beginWork = ref(""); // 始業時刻
+const endWork = ref(""); // 就業時刻
+const beginBreak = ref(""); // 休憩時間
+const endBreak = ref(""); // 休憩時間
 const reasonText = ref(""); //申請理由テキスト
 
 //シフト申請関数
 const shiftPost = () => {
-  console.log(
-    `シフト申請から押した。 日付:${day.value} 始業時刻: ${startTime.value},就業時刻: ${endTime.value},休憩開始時刻: ${breakStartTime.value},休憩終了時刻: ${breakEndTime.value},申請理由: ${reasonText.value}`
-  );
+  console.log(`${day.value}　出勤時間(${formatTime(beginWork.value)}-${formatTime(endWork.value)})休憩：(${formatTime(beginBreak.value)}-${formatTime(endBreak.value)}申請理由${reasonText.value}`);
 };
 </script>
 
@@ -40,10 +39,10 @@ const shiftPost = () => {
 
         <!-- 始業,就業,休憩時刻-->
         <WorkControlPanel
-          v-model:startTime="startTime"
-          v-model:endTime="endTime"
-          v-model:breakStartTime="breakStartTime"
-          v-model:breakEndTime="breakEndTime"
+          v-model:beginWork="beginWork"
+          v-model:endWork="endWork"
+          v-model:beginBreak="beginBreak"
+          v-model:endBreak="endBreak"
         />
 
         <!-- 申請理由 -->
@@ -51,10 +50,11 @@ const shiftPost = () => {
 
         <!-- 申請時刻 -->
         <ReqestTime
-          :startTime="startTime"
-          :endTime="endTime"
-          :breakStartTime="breakStartTime"
-          :breakEndTime="breakEndTime"
+          :day="day"
+          :beginWork="beginWork"
+          :endWork="endWork"
+          :beginBreak="beginBreak"
+          :endBreak="endBreak"
         />
 
         <!--申請,戻るボタン-->
