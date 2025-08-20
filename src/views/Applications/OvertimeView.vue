@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ApplyBtn from "../../components/ApplyBtn.vue";
 import NavList from "../../components/NavList.vue";
 import RequestReason from "../../components/RequestReason.vue";
@@ -7,40 +7,137 @@ import SelectShift from "../../components/SelectShift.vue";
 import ReqestTime from "../../components/ReqestTime.vue";
 
 const reasonText = ref(""); //申請理由テキスト
+const beginWork = ref("") //選択したシフトの日付をとるための変数
 const selectedShiftId = ref(null);
-const overTimeStart = ref(""); //残業開始
-const overTimeEnd = ref(""); //残業終了
+const beginOvertime = ref(""); //残業開始
+const endOvertime = ref(""); //残業終了
 
 // シフト(仮)データ
 const shifts = ref([
   {
     id: 1,
-    start: "09:00",
-    end: "18:00",
-    breakStart: "12:00",
-    breakEnd: "13:00",
+    beginWork: "2025-07-01T09:00:00",
+    endWork: "2025-07-01T18:00:00",
+    beginBreak: "2025-07-01T12:00:00",
+    endBreak: "2025-07-01T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30,
   },
   {
     id: 2,
-    start: "10:00",
-    end: "19:00",
-    breakStart: "14:00",
-    breakEnd: "15:00",
+    beginWork: "2025-07-02T09:15:00",
+    endWork: "2025-07-02T18:15:00",
+    beginBreak: "2025-07-02T12:15:00",
+    endBreak: "2025-07-02T13:15:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 45,
   },
   {
     id: 3,
-    start: "12:00",
-    end: "21:00",
-    breakStart: "16:00",
-    breakEnd: "17:00",
+    beginWork: "2025-07-03T09:00:00",
+    endWork: "2025-07-03T18:00:00",
+    beginBreak: "2025-07-03T12:00:00",
+    endBreak: "2025-07-03T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 1,
+    overWork: 60,
   },
+  {
+    id: 4,
+    beginWork: "2025-07-04T09:10:00",
+    endWork: "2025-07-04T18:00:00",
+    beginBreak: "2025-07-04T12:00:00",
+    endBreak: "2025-07-04T13:00:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 20,
+  },
+  {
+    id: 5,
+    beginWork: "2025-07-05T09:00:00",
+    endWork: "2025-07-05T17:45:00",
+    beginBreak: "2025-07-05T12:15:00",
+    endBreak: "2025-07-05T13:15:00",
+    lateness: 0,
+    leaveEarly: 1,
+    outing: 0,
+    overWork: 15,
+  },
+  {
+    id: 6,
+    beginWork: "2025-07-06T09:00:00",
+    endWork: "2025-07-06T18:30:00",
+    beginBreak: "2025-07-06T12:00:00",
+    endBreak: "2025-07-06T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 90,
+  },
+  {
+    id: 7,
+    beginWork: "2025-07-07T08:45:00",
+    endWork: "2025-07-07T18:00:00",
+    beginBreak: "2025-07-07T12:00:00",
+    endBreak: "2025-07-07T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 30,
+  },
+  {
+    id: 8,
+    beginWork: "2025-07-08T09:30:00",
+    endWork: "2025-07-08T18:00:00",
+    beginBreak: "2025-07-08T12:30:00",
+    endBreak: "2025-07-08T13:30:00",
+    lateness: 1,
+    leaveEarly: 0,
+    outing: 1,
+    overWork: 60,
+  },
+  {
+    id: 9,
+    beginWork: "2025-07-09T09:00:00",
+    endWork: "2025-07-09T18:00:00",
+    beginBreak: "2025-07-09T12:00:00",
+    endBreak: "2025-07-09T13:00:00",
+    lateness: 0,
+    leaveEarly: 0,
+    outing: 0,
+    overWork: 0,
+  },
+  {
+    id: 10,
+    beginWork: "2025-07-10T09:00:00",
+    endWork: "2025-07-10T17:30:00",
+    beginBreak: "2025-07-10T12:00:00",
+    endBreak: "2025-07-10T13:00:00",
+    lateness: 0,
+    leaveEarly: 1,
+    outing: 0,
+    overWork: 0,
+  }
 ]);
+
+watch(selectedShiftId, (newId) => {
+  const selected = shifts.value.find((s) => s.id === newId);
+  if (selected) {
+    beginWork.value = selected.beginWork;
+  } else {
+    beginWork.value = "";
+  }
+});
 
 //残業申請関数
 const overTimePost = () => {
-  console.log(
-    `残業申請から押した。選択シフト${selectedShiftId.value} 残業開始時刻: ${overTimeStart.value} 残業終了時刻${overTimeEnd.value} 申請理由: ${reasonText.value}`
-  );
+  console.log(`残業開始時間${beginOvertime.value}、残業終了時間${endOvertime.value}`)
 };
 </script>
 
@@ -56,12 +153,13 @@ const overTimePost = () => {
           :shifts="shifts"
           v-model:selectedShiftId="selectedShiftId"
         />
-        <!--残業開始時刻-->
+        <div v-if="selectedShiftId">
+          <!--残業開始時刻-->
         <div>
           <label class="block font-semibold md:mb-2">残業開始時刻</label>
           <input
             type="time"
-            v-model="overTimeStart"
+            v-model="beginOvertime"
             class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
           />
         </div>
@@ -70,7 +168,7 @@ const overTimePost = () => {
           <label class="block font-semibold md:mb-2">残業終了時刻</label>
           <input
             type="time"
-            v-model="overTimeEnd"
+            v-model="endOvertime"
             class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"
           />
         </div>
@@ -78,7 +176,8 @@ const overTimePost = () => {
         <!--申請理由-->
         <RequestReason v-model:reasonText="reasonText" />
 
-        <ReqestTime :startTime="overTimeStart" :endTime="overTimeEnd" />
+        <ReqestTime  :beginWork="beginWork" :beginOvertime="beginOvertime" :endOvertime="endOvertime" />
+        </div>
 
         <!--申請ボタン-->
         <ApplyBtn :overTimePost="overTimePost" />

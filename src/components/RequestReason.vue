@@ -27,7 +27,12 @@ const isOvertime = route.path === "/overtime";
 <!--申請理由コンポーネント-->
 <template>
   <div>
-    <label class="block font-semibold md:mb-2">申請理由({{ isOvertime ? "必須" : "任意" }})</label>
+    <label class="block font-semibold md:mb-2">
+      申請理由
+      <span :class="isOvertime ? 'text-red-500' : 'text-black'">
+        ({{ isOvertime ? '必須' : '任意' }})
+      </span>
+    </label>
     <!--@inputはユーザーが入力するたび発火する-->
     <textarea
       class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-green-200 hover:ring hover:ring-green-200"

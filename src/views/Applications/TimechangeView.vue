@@ -120,116 +120,6 @@ const shifts = ref([
     outing: 0,
     overWork: 0,
   },
-  {
-    id: 11,
-    beginWork: "2025-07-11T09:05:00",
-    endWork: "2025-07-11T18:05:00",
-    beginBreak: "2025-07-11T12:05:00",
-    endBreak: "2025-07-11T13:05:00",
-    lateness: 1,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 65,
-  },
-  {
-    id: 12,
-    beginWork: "2025-07-12T09:00:00",
-    endWork: "2025-07-12T18:00:00",
-    beginBreak: "2025-07-12T12:00:00",
-    endBreak: "2025-07-12T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 30,
-  },
-  {
-    id: 13,
-    beginWork: "2025-07-13T09:00:00",
-    endWork: "2025-07-13T18:00:00",
-    beginBreak: "2025-07-13T12:00:00",
-    endBreak: "2025-07-13T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 60,
-  },
-  {
-    id: 14,
-    beginWork: "2025-07-14T09:20:00",
-    endWork: "2025-07-14T18:00:00",
-    beginBreak: "2025-07-14T12:00:00",
-    endBreak: "2025-07-14T13:00:00",
-    lateness: 1,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 10,
-  },
-  {
-    id: 15,
-    beginWork: "2025-07-15T08:50:00",
-    endWork: "2025-07-15T18:00:00",
-    beginBreak: "2025-07-15T12:00:00",
-    endBreak: "2025-07-15T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 70,
-  },
-  {
-    id: 16,
-    beginWork: "2025-07-16T09:00:00",
-    endWork: "2025-07-16T18:00:00",
-    beginBreak: "2025-07-16T12:00:00",
-    endBreak: "2025-07-16T13:00:00",
-    lateness: 0,
-    leaveEarly: 1,
-    outing: 0,
-    overWork: 0,
-  },
-  {
-    id: 17,
-    beginWork: "2025-07-17T09:00:00",
-    endWork: "2025-07-17T18:00:00",
-    beginBreak: "2025-07-17T12:00:00",
-    endBreak: "2025-07-17T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 1,
-    overWork: 45,
-  },
-  {
-    id: 18,
-    beginWork: "2025-07-18T09:10:00",
-    endWork: "2025-07-18T18:00:00",
-    beginBreak: "2025-07-18T12:00:00",
-    endBreak: "2025-07-18T13:00:00",
-    lateness: 1,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 20,
-  },
-  {
-    id: 19,
-    beginWork: "2025-07-19T09:00:00",
-    endWork: "2025-07-19T18:00:00",
-    beginBreak: "2025-07-19T12:00:00",
-    endBreak: "2025-07-19T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 60,
-  },
-  {
-    id: 20,
-    beginWork: "2025-07-20T09:00:00",
-    endWork: "2025-07-20T18:00:00",
-    beginBreak: "2025-07-20T12:00:00",
-    endBreak: "2025-07-20T13:00:00",
-    lateness: 0,
-    leaveEarly: 0,
-    outing: 0,
-    overWork: 30,
-  },
 ]);
 
 const selectedShiftId = ref(null); // シフト選択変数
@@ -257,7 +147,13 @@ watch(selectedShiftId, (newId) => {
 
 //時間変更申請関数
 const TimeChangePost = () => {
-  console.log(`${formatDay(beginWork.value)}　出勤時間(${formatTime(beginWork.value)}-${formatTime(endWork.value)})休憩：(${formatTime(beginBreak.value)}-${formatTime(endBreak.value)}申請理由${reasonText.value}`);
+  console.log(
+    `${formatDay(beginWork.value)}　出勤時間(${formatTime(
+      beginWork.value
+    )}-${formatTime(endWork.value)})休憩：(${formatTime(
+      beginBreak.value
+    )}-${formatTime(endBreak.value)}申請理由${reasonText.value}`
+  );
 };
 </script>
 
@@ -276,26 +172,26 @@ const TimeChangePost = () => {
           v-model:selectedShiftId="selectedShiftId"
         />
 
-        <!-- 始業,就業,休憩時間-->
-        <WorkControlPanel
-          v-if="selectedShiftId"
-          v-model:beginWork="beginWork"
-          v-model:endWork="endWork"
-          v-model:beginBreak="beginBreak"
-          v-model:endBreak="endBreak"
-        />
+        <div v-if="selectedShiftId">
+          <!-- 始業,就業,休憩時間-->
+          <WorkControlPanel
+            v-model:beginWork="beginWork"
+            v-model:endWork="endWork"
+            v-model:beginBreak="beginBreak"
+            v-model:endBreak="endBreak"
+          />
 
-        <!-- 申請理由 -->
-        <RequestReason v-model:reasonText="reasonText" />
+          <!-- 申請理由 -->
+          <RequestReason v-model:reasonText="reasonText" />
 
-        <!-- 申請時間 -->
-        <ReqestTime
-          v-if="selectedShiftId"
-          :beginWork="beginWork"
-          :endWork="endWork"
-          :beginBreak="beginBreak"
-          :endBreak="endBreak"
-        />
+          <!-- 申請時間 -->
+          <ReqestTime
+            :beginWork="beginWork"
+            :endWork="endWork"
+            :beginBreak="beginBreak"
+            :endBreak="endBreak"
+          />
+        </div>
 
         <!-- 申請ボタン -->
         <ApplyBtn :TimeChangePost="TimeChangePost" />

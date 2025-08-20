@@ -10,6 +10,8 @@ const props = defineProps({
   endWork: String,
   beginBreak: String,
   endBreak: String,
+  beginOvertime: String,
+  endOvertime: String
 });
 
 const isShift = route.path === '/shift';
@@ -24,7 +26,7 @@ const workPart = computed(() =>
   !isOvertime ? '出勤時間' : '残業時間'
 );
 const timePart = computed(() =>
-  `${formatTime(props.beginWork)}-${formatTime(props.endWork)}`
+  !isOvertime ? `${formatTime(props.beginWork)}-${formatTime(props.endWork)}` : `${props.beginOvertime}-${props.endOvertime}`
 );
 const breakPart = computed(() =>
   !isOvertime && !isAttendanceRequest

@@ -141,12 +141,12 @@ watch([year, month], () => {
       </div>
 
       <!-- カレンダー -->
-      <div class="grid grid-cols-7 text-base lg:text-xl lg:gap-2">
+      <div class="grid grid-cols-7 text-base lg:text-xl">
         <!-- 曜日 -->
         <div
           v-for="(label, i) in ['日', '月', '火', '水', '木', '金', '土']"
           :key="i"
-          class="text-center font-semibold bg-green-200 border-t border-b border-r border-gray-500 lg:border-l"
+          class="text-center font-semibold bg-green-200 border-t border-b border-r border-gray-500"
           :class="{
             'text-red-500': i === 0,
             'text-blue-500': i === 6,
@@ -159,7 +159,7 @@ watch([year, month], () => {
         <div
           v-for="(_, i) in emptyCells"
           :key="'empty-' + i"
-          class="h-28 bg-gray-200 border-r border-b lg:border-t lg:border-l"
+          class="h-28 bg-gray-200 border-r border-b"
         ></div>
 
         <!-- 日付セル -->
@@ -167,7 +167,7 @@ watch([year, month], () => {
           v-for="day in calendarDays"
           :key="day"
           @click="togglePopup"
-          class="h-28 cursor-pointer border-r border-b border-gray-500 bg-white p-1 flex flex-col text-xs relative hover:bg-green-100 hover:border-green-500 lg:border-t lg:border-l"
+          class="h-28 cursor-pointer border-r border-b border-gray-500 bg-white p-1 flex flex-col text-xs relative hover:bg-green-100 hover:border-green-500"
           :class="{
             'bg-yellow-100 border-yellow-500':
               isCurrentMonth && day === currentDate,

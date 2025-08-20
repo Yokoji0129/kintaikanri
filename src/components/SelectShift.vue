@@ -27,7 +27,7 @@ const selectShift = (id) => {
 // 選択中のシフト
 const getShiftLabel = (id) => {
   const shift = props.shifts.find((s) => s.id === id);
-  return shift ? `${formatDay(shift.beginWork)}(${formatTime(shift.beginWork)}~${formatTime(shift.endWork)})休憩(${formatTime(shift.beginBreak)}~${formatTime(shift.endBreak)})` : null;
+  return shift ? `${formatDay(shift.beginWork)}　出勤時間(${formatTime(shift.beginWork)}~${formatTime(shift.endWork)})　休憩時間(${formatTime(shift.beginBreak)}~${formatTime(shift.endBreak)})` : null;
 };
 </script>
 
@@ -49,9 +49,8 @@ const getShiftLabel = (id) => {
       class="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm lg:ml-64"
       @click.self="isOpen = false"
     >
-      <div
-        class="bg-white mt-[70px] rounded-lg shadow-lg max-h-[70vh] w-90 overflow-y-auto"
-      >
+     <div class="bg-white mt-[70px] border-2 border-green-500 max-h-[70vh] w-90 overflow-y-auto shadow-xl">
+
         <div class="p-4 border-b text-lg font-semibold">シフトを選択</div>
         <ul>
           <li
@@ -68,7 +67,7 @@ const getShiftLabel = (id) => {
               {{ formatDay(shift.beginWork) }}
             </div>
             <div class="text-sm text-gray-500">
-              <span class="text-gray-800">休憩時間</span>{{ formatTime(shift.beginWork) }}〜{{ formatTime(shift.endWork) }}
+              <span class="text-gray-800">出勤時間</span>{{ formatTime(shift.beginWork) }}〜{{ formatTime(shift.endWork) }}
             </div>
             <div class="text-sm text-gray-500">
               <span class="text-gray-800">休憩時間</span>{{ formatTime(shift.beginBreak) }}〜{{ formatTime(shift.endBreak) }}
